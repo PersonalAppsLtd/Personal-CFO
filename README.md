@@ -5,7 +5,7 @@ A personal finance app that makes card and contactless spending feel like cash.
 - **Wallet**: your monthly spending allowance drawn as banknotes. Every card tap removes money from the wallet, so you can see it going down.
 - **Spend alerts**: a notification each time you spend, e.g. *"£9.42 at TfL Travel. £262.35 left of £600.00 · 20 days to payday (about £13.12 a day)."*
 - **Bank connections**: all your UK current accounts, savings and credit cards through Open Banking (TrueLayer), read-only.
-- **Bills**: direct debits and standing orders, and how much is still due before payday.
+- **Bills**: direct debits and standing orders, plus regular costs paid by card (fuel, groceries, parking) with a monthly budget. None of these come out of the spending allowance; whatever is left in each budget counts towards bills still due before payday. Fuel stations are recognised automatically.
 - **Cash flow**: where each pay period's income went: bills, spending, saving and investing.
 - **Points**: 10 points per 1% of income saved, 20 points per 1% invested, and 100 bonus points for staying within your allowance. Levels go from Starter up to Personal CFO.
 - **Demo mode**: try everything with realistic sample data before connecting a bank.

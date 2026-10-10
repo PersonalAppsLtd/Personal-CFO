@@ -1,6 +1,7 @@
 import { useApp } from "../lib/data";
 import { money } from "../lib/money";
 import type { RecurringPayment } from "../lib/types";
+import CardBills from "../components/CardBills";
 
 function nextDate(r: RecurringPayment): Date | null {
   if (r.next_payment_date) return new Date(r.next_payment_date + "T00:00:00");
@@ -37,6 +38,7 @@ export default function BillsPage() {
       </section>
 
       <section className="card">
+        <h2>Direct debits &amp; standing orders</h2>
         {sorted.length === 0 ? (
           <p className="muted">No direct debits or standing orders found yet. Some banks don't share these; they'll still show up in Activity when they're paid.</p>
         ) : (
@@ -60,6 +62,8 @@ export default function BillsPage() {
           </ul>
         )}
       </section>
+
+      <CardBills />
     </div>
   );
 }
