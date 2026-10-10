@@ -3,6 +3,53 @@ import { useApp } from "../lib/data";
 import { devicePushEnabled, enablePush } from "../lib/push";
 import { money, suggestAllowance } from "../lib/money";
 import { supabase } from "../supabase";
+import { Moon, Sun } from "lucide-react";
+import PersonalDetails from "../components/PersonalDetails";
+
+const THEME_KEY = "personalcfo.theme";
+const THEMES = [
+  { value: "light", label: "Light", Icon: Sun },
+  { value: "dark", label: "Dark", Icon: Moon },
+] as const;
+type Theme = (typeof THEMES)[number]["value"];
+
+function currentTheme(): Theme {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === "light" || saved === "dark") return saved;
+  } catch {
+    // storage blocked: fall back to the device setting
+  }
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function AppearanceCard() {
+  const [theme, setTheme] = useState<Theme>(currentTheme);
+
+  function choose(value: Theme) {
+    document.documentElement.dataset.theme = value;
+    try {
+      localStorage.setItem(THEME_KEY, value);
+    } catch {
+      // still applies for this visit
+    }
+    setTheme(value);
+  }
+
+  return (
+    <section className="card stack">
+      <h2>Appearance</h2>
+      <div className="theme-options" role="radiogroup" aria-label="Theme">
+        {THEMES.map(({ value, label, Icon }) => (
+          <button key={value} type="button" role="radio" aria-checked={theme === value} className="theme-option" onClick={() => choose(value)}>
+            <Icon size={28} aria-hidden />
+            {label} mode
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function SettingsPage() {
   const { profile, scores, updateProfile, session } = useApp();
@@ -31,6 +78,8 @@ export default function SettingsPage() {
   return (
     <div className="stack-lg">
       <h1>Settings</h1>
+
+      <PersonalDetails />
 
       <section className="card stack">
         <h2>Your wallet</h2>
@@ -71,6 +120,8 @@ export default function SettingsPage() {
           can arrive a little after you tap your card.
         </p>
       </section>
+
+      <AppearanceCard />
 
       <section className="card stack">
         <h2>Account</h2>

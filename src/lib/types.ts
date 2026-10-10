@@ -13,6 +13,9 @@ export const KIND_LABELS: Record<Kind, string> = {
 export interface Profile {
   id: string;
   display_name: string | null;
+  company: string | null;
+  date_of_birth: string | null;
+  avatar_url: string | null;
   currency: string;
   monthly_allowance: number | null;
   payday: number;
