@@ -89,3 +89,14 @@ export function suggestAllowance(periods: Array<{ income: number; bills: number;
   const free = avg((p) => p.income) - avg((p) => p.bills) - avg((p) => p.saved) - avg((p) => p.invested);
   return free > 0 ? Math.floor(free / 10) * 10 : null;
 }
+
+/** True when a transaction's text contains any of a bill's keywords (case-insensitive, at least 2 letters). */
+export function matchesKeywords(text: string, keywords: string[]): boolean {
+  const t = text.toLowerCase();
+  return keywords.some((k) => k.trim().length >= 2 && t.includes(k.trim().toLowerCase()));
+}
+
+/** Splits a comma-separated list typed by the user into clean keywords. */
+export function parseKeywords(input: string): string[] {
+  return [...new Set(input.split(",").map((k) => k.trim().toLowerCase()).filter((k) => k.length >= 2))];
+}

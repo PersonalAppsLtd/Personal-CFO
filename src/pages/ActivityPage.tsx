@@ -8,7 +8,7 @@ const FILTERS: Array<{ id: string; label: string; kinds: Kind[] | null }> = [
   { id: "all", label: "All", kinds: null },
   { id: "spending", label: "Spending", kinds: ["spending"] },
   { id: "income", label: "Income", kinds: ["income"] },
-  { id: "bills", label: "Bills", kinds: ["direct_debit", "standing_order"] },
+  { id: "bills", label: "Bills", kinds: ["direct_debit", "standing_order", "bill"] },
   { id: "growth", label: "Saving & investing", kinds: ["saving", "investment"] },
 ];
 
@@ -110,7 +110,8 @@ function KindEditor({ txn, userId, onClose, onSaved }: { txn: Transaction; userI
         </label>
         <p className="muted small">
           Payments into savings count as <em>Saving</em> and into ISAs, pensions or brokers as <em>Investing</em>. Both earn points.
-          <em> Transfer</em> is for moving money between your own accounts.
+          <em> Regular bill</em> is for costs you pay by card but budget for separately, like fuel, so they don't come out of
+          your allowance. <em>Transfer</em> is for moving money between your own accounts.
         </p>
         <div className="row-end">
           <button onClick={onClose}>Cancel</button>

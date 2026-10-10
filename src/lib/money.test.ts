@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { levelFor, money, pickDenomination, signedMoney, spendingPace, suggestAllowance, walletNotes } from "./money";
+import { levelFor, matchesKeywords, money, parseKeywords, pickDenomination, signedMoney, spendingPace, suggestAllowance, walletNotes } from "./money";
 
 describe("money formatting", () => {
   it("formats pounds", () => {
@@ -64,5 +64,17 @@ describe("allowance suggestion", () => {
       ]),
     ).toBe(1080);
     expect(suggestAllowance([])).toBeNull();
+  });
+});
+
+describe("bill keywords", () => {
+  it("matches any keyword case-insensitively and ignores one-letter words", () => {
+    expect(matchesKeywords("SHELL CONTACTLESS Shell", ["bp", "shell"])).toBe(true);
+    expect(matchesKeywords("PRET A MANGER", ["bp", "shell"])).toBe(false);
+    expect(matchesKeywords("A B C", ["a", " "])).toBe(false);
+  });
+
+  it("parses a typed list", () => {
+    expect(parseKeywords(" Shell, BP ,, e, shell")).toEqual(["shell", "bp"]);
   });
 });

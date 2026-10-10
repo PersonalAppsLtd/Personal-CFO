@@ -5,6 +5,7 @@ import type {
   Account,
   AllowanceStatus,
   AppNotification,
+  BillBudget,
   Connection,
   PeriodScore,
   Profile,
@@ -20,6 +21,7 @@ interface AppData {
   accounts: Account[];
   connections: Connection[];
   recurring: RecurringPayment[];
+  billBudgets: BillBudget[];
   scores: PeriodScore[];
   transactions: Transaction[];
   notifications: AppNotification[];
@@ -48,6 +50,7 @@ export function AppDataProvider({ session, children }: { session: Session; child
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [connections, setConnections] = useState<Connection[]>([]);
   const [recurring, setRecurring] = useState<RecurringPayment[]>([]);
+  const [billBudgets, setBillBudgets] = useState<BillBudget[]>([]);
   const [scores, setScores] = useState<PeriodScore[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
@@ -58,7 +61,7 @@ export function AppDataProvider({ session, children }: { session: Session; child
 
   const refresh = useCallback(async () => {
     const since = new Date(Date.now() - 120 * 24 * 3600 * 1000).toISOString();
-    const [p, s, a, c, r, sc, t, n] = await Promise.all([
+    const [p, s, a, c, r, sc, t, n, bb] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", userId).single(),
       supabase.rpc("allowance_status"),
       supabase.from("accounts").select("*").order("created_at"),
@@ -68,6 +71,7 @@ export function AppDataProvider({ session, children }: { session: Session; child
       supabase.from("transactions").select("id, account_id, booked_at, amount, description, merchant, kind, kind_locked")
         .gte("booked_at", since).order("booked_at", { ascending: false }).limit(1000),
       supabase.from("notifications").select("id, title, body, read_at, created_at").order("created_at", { ascending: false }).limit(30),
+      supabase.from("bill_budgets").select("id, name, monthly_amount, keywords").order("created_at"),
     ]);
     if (p.data) setProfile({ ...p.data, monthly_allowance: num(p.data.monthly_allowance) });
     if (s.data) {
@@ -90,6 +94,7 @@ export function AppDataProvider({ session, children }: { session: Session; child
     );
     setTransactions((t.data ?? []).map((x) => ({ ...x, amount: Number(x.amount) })));
     setNotifications(n.data ?? []);
+    setBillBudgets((bb.data ?? []).map((x) => ({ ...x, monthly_amount: Number(x.monthly_amount) })));
     setLoading(false);
   }, [userId]);
 
@@ -145,7 +150,7 @@ export function AppDataProvider({ session, children }: { session: Session; child
   return (
     <Ctx.Provider
       value={{
-        session, profile, status, accounts, connections, recurring, scores, transactions, notifications,
+        session, profile, status, accounts, connections, recurring, billBudgets, scores, transactions, notifications,
         loading, syncing, toast, dismissToast: () => setToast(null), refresh, syncBanks, updateProfile,
       }}
     >

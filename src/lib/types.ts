@@ -1,10 +1,11 @@
-export type Kind = "income" | "spending" | "direct_debit" | "standing_order" | "saving" | "investment" | "transfer";
+export type Kind = "income" | "spending" | "direct_debit" | "standing_order" | "bill" | "saving" | "investment" | "transfer";
 
 export const KIND_LABELS: Record<Kind, string> = {
   income: "Income",
   spending: "Spending",
   direct_debit: "Direct debit",
   standing_order: "Standing order",
+  bill: "Regular bill",
   saving: "Saving",
   investment: "Investing",
   transfer: "Transfer",
@@ -104,4 +105,11 @@ export interface AppNotification {
   body: string;
   read_at: string | null;
   created_at: string;
+}
+
+export interface BillBudget {
+  id: string;
+  name: string;
+  monthly_amount: number;
+  keywords: string[];
 }
