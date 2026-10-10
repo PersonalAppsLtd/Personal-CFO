@@ -97,16 +97,17 @@ label.check input { width: auto; margin: 0; }
   position: sticky; top: 0; z-index: 10; margin: 0 -16px 16px; padding: env(safe-area-inset-top) 16px 0;
   background: var(--bg); border-bottom: 1px solid var(--line);
 }
-.topbar-inner { display: flex; align-items: center; gap: 1.5rem; min-height: 56px; }
+.topbar-inner { display: flex; align-items: center; gap: 1.5rem; min-height: 64px; }
+.topnav > a:first-child { margin-left: auto; }
 .brand { font-weight: 800; color: var(--ink); text-decoration: none; font-size: 1.1rem; white-space: nowrap; }
 .topnav { display: flex; gap: 0.25rem; overflow-x: auto; scrollbar-width: none; flex: 1; }
 .topnav::-webkit-scrollbar { display: none; }
 .topnav a {
-  display: flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.75rem; border-radius: 999px;
-  color: var(--ink-2); text-decoration: none; font-size: 0.92rem; white-space: nowrap;
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 10px; min-width: 64px;
+  color: var(--muted); text-decoration: none; font-size: 0.75rem; white-space: nowrap; border-radius: 10px;
 }
-.topnav a:hover { background: var(--surface-2); }
-.topnav a.active { background: var(--brand); color: var(--brand-ink); font-weight: 600; }
+.topnav a:hover { color: var(--ink); }
+.topnav a.active { color: var(--ink); font-weight: 600; }
 @media (max-width: 720px) {
   .topbar-inner { flex-direction: column; align-items: stretch; gap: 0.25rem; padding: 10px 0 8px; }
   .topnav { margin: 0 -16px; padding: 0 16px; }
