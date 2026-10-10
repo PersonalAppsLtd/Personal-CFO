@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="112" fill="#2f5bea"/>
-  <rect x="96" y="160" width="320" height="192" rx="24" fill="#ffffff"/>
-  <circle cx="256" cy="256" r="56" fill="#2f5bea"/>
-  <text x="256" y="278" font-family="Georgia, serif" font-size="72" font-weight="700" fill="#ffffff" text-anchor="middle">£</text>
+  <!-- banknote with a pound sign -->
+  <rect x="40" y="116" width="432" height="280" rx="40" fill="#ffffff"/>
+  <path transform="translate(256 256) scale(1.45) translate(-246 -246)" d="M292 316h-96v-22c14-8 22-22 22-40v-6h-22v-26h22v-16c0-36 22-58 56-58 20 0 34 6 44 14l-14 26c-8-6-18-10-28-10-16 0-26 10-26 30v14h46v26h-46v8c0 14-4 26-12 34h54z" fill="#2f5bea"/>
 </svg>
