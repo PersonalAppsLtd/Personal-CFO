@@ -13,7 +13,7 @@
   --note: #a9bcf7;
   --note-ink: #0f2470;
   --neg: #b42318;
-  --pos: #1f7a4d;
+  --pos: var(--ink);
   --warn-bg: #eef2fe;
   --series-1: #2a78d6;
   --series-2: #eb6834;
@@ -40,7 +40,7 @@
     --note: #3d5fd6;
     --note-ink: #f2f5ff;
     --neg: #ff8a80;
-    --pos: #6fdca7;
+    --pos: var(--ink);
     --warn-bg: #1c2340;
     --series-1: #3987e5;
     --series-2: #d95926;
