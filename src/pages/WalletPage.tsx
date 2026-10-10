@@ -64,7 +64,7 @@ export default function WalletPage() {
         </div>
         <div className="stat">
           <span className="stat-label">Paid in this period</span>
-          <span className="stat-value">{money(status.income)}</span>
+          <span className="stat-value">{money(status.income, { whole: true })}</span>
         </div>
       </section>
 

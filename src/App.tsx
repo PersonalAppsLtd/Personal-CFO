@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, Navigate, Route, Routes } from "react-router-dom";
+import { NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
 import { AppDataProvider, useApp } from "./lib/data";
@@ -37,10 +37,18 @@ const NAV = [
   { to: "/bills", label: "Bills", icon: "📅" },
   { to: "/cash-flow", label: "Cash flow", icon: "📊" },
   { to: "/points", label: "Points", icon: "🏆" },
+  { to: "/accounts", label: "Accounts", icon: "🏦" },
+  { to: "/settings", label: "Settings", icon: "⚙️" },
 ];
 
 function Shell() {
   const { profile, loading, toast, dismissToast } = useApp();
+  const { pathname } = useLocation();
+
+  // On narrow screens the tabs scroll sideways; keep the current one visible
+  useEffect(() => {
+    document.querySelector(".topnav a.active")?.scrollIntoView({ block: "nearest", inline: "center" });
+  }, [pathname, loading]);
 
   useEffect(() => {
     if (!toast) return;
@@ -54,11 +62,17 @@ function Shell() {
   return (
     <div className="shell">
       <header className="topbar">
-        <NavLink to="/" className="brand">Personal CFO</NavLink>
-        <nav className="topnav">
-          <NavLink to="/accounts">Accounts</NavLink>
-          <NavLink to="/settings">Settings</NavLink>
-        </nav>
+        <div className="topbar-inner">
+          <NavLink to="/" className="brand">Personal CFO</NavLink>
+          <nav className="topnav" aria-label="Main">
+            {NAV.map((n) => (
+              <NavLink key={n.to} to={n.to} end={n.to === "/"}>
+                <span aria-hidden>{n.icon}</span>
+                {n.label}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
       </header>
 
       {toast && (
@@ -81,14 +95,6 @@ function Shell() {
         </Routes>
       </main>
 
-      <nav className="tabbar">
-        {NAV.map((n) => (
-          <NavLink key={n.to} to={n.to} end={n.to === "/"}>
-            <span aria-hidden>{n.icon}</span>
-            {n.label}
-          </NavLink>
-        ))}
-      </nav>
     </div>
   );
 }
