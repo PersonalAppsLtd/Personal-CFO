@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
+import { CalendarDays, ChartColumn, Landmark, Receipt, Settings, Trophy, Wallet } from "lucide-react";
 import { supabase } from "./supabase";
 import { AppDataProvider, useApp } from "./lib/data";
 import AuthPage from "./pages/AuthPage";
@@ -32,13 +33,13 @@ export default function App() {
 }
 
 const NAV = [
-  { to: "/", label: "Wallet", icon: "💷" },
-  { to: "/activity", label: "Activity", icon: "🧾" },
-  { to: "/bills", label: "Bills", icon: "📅" },
-  { to: "/cash-flow", label: "Cash flow", icon: "📊" },
-  { to: "/points", label: "Points", icon: "🏆" },
-  { to: "/accounts", label: "Accounts", icon: "🏦" },
-  { to: "/settings", label: "Settings", icon: "⚙️" },
+  { to: "/", label: "Wallet", Icon: Wallet },
+  { to: "/activity", label: "Activity", Icon: Receipt },
+  { to: "/bills", label: "Bills", Icon: CalendarDays },
+  { to: "/cash-flow", label: "Cash flow", Icon: ChartColumn },
+  { to: "/points", label: "Points", Icon: Trophy },
+  { to: "/accounts", label: "Accounts", Icon: Landmark },
+  { to: "/settings", label: "Settings", Icon: Settings },
 ];
 
 function Shell() {
@@ -65,10 +66,14 @@ function Shell() {
         <div className="topbar-inner">
           <NavLink to="/" className="brand">Personal CFO</NavLink>
           <nav className="topnav" aria-label="Main">
-            {NAV.map((n) => (
-              <NavLink key={n.to} to={n.to} end={n.to === "/"}>
-                <span aria-hidden>{n.icon}</span>
-                {n.label}
+            {NAV.map(({ to, label, Icon }) => (
+              <NavLink key={to} to={to} end={to === "/"} title={label}>
+                {({ isActive }) => (
+                  <>
+                    <Icon size={22} strokeWidth={isActive ? 2.4 : 1.8} aria-hidden />
+                    <span className="nav-label">{label}</span>
+                  </>
+                )}
               </NavLink>
             ))}
           </nav>
