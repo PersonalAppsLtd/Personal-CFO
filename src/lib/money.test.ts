@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { USERNAME_PATTERN, levelFor, matchesKeywords, money, parseKeywords, pickDenomination, signedMoney, spendingPace, suggestAllowance, walletNotes } from "./money";
+import { USERNAME_PATTERN, matchesKeywords, money, parseKeywords, pickDenomination, signedMoney, spendingPace, suggestAllowance, walletNotes } from "./money";
 
 describe("money formatting", () => {
   it("formats pounds", () => {
@@ -44,14 +44,6 @@ describe("spending pace", () => {
     expect(spendingPace(600, 100, "2026-09-28", "2026-10-27", today)).toBe("ahead");
     expect(spendingPace(600, 500, "2026-09-28", "2026-10-27", today)).toBe("over");
     expect(spendingPace(600, 700, "2026-09-28", "2026-10-27", today)).toBe("over");
-  });
-});
-
-describe("levels", () => {
-  it("maps points to levels", () => {
-    expect(levelFor(0)).toEqual({ name: "Starter", min: 0, next: 500 });
-    expect(levelFor(1600).name).toBe("Silver Saver");
-    expect(levelFor(20000)).toEqual({ name: "Personal CFO", min: 12000, next: null });
   });
 });
 

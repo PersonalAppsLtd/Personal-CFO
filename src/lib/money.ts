@@ -60,27 +60,6 @@ export function spendingPace(allowance: number, spent: number, periodStart: stri
   return "on-track";
 }
 
-export interface Level {
-  name: string;
-  min: number;
-  next: number | null;
-}
-
-const LEVELS: Array<{ name: string; min: number }> = [
-  { name: "Starter", min: 0 },
-  { name: "Bronze Saver", min: 500 },
-  { name: "Silver Saver", min: 1500 },
-  { name: "Gold Saver", min: 3500 },
-  { name: "Platinum Investor", min: 7000 },
-  { name: "Personal CFO", min: 12000 },
-];
-
-export function levelFor(points: number): Level {
-  let i = 0;
-  while (i + 1 < LEVELS.length && points >= LEVELS[i + 1].min) i++;
-  return { name: LEVELS[i].name, min: LEVELS[i].min, next: LEVELS[i + 1]?.min ?? null };
-}
-
 /** Suggests an allowance: typical income minus fixed bills, saving and investing. */
 export function suggestAllowance(periods: Array<{ income: number; bills: number; saved: number; invested: number }>): number | null {
   const complete = periods.filter((p) => p.income > 0);
