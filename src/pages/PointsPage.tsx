@@ -25,6 +25,7 @@ export default function PointsPage() {
         <ul className="list">
           <li className="row-between"><span>Every 1% of your pay you <strong>save</strong></span><strong>10 pts</strong></li>
           <li className="row-between"><span>Every 1% of your pay you <strong>invest</strong></span><strong>20 pts</strong></li>
+          <li className="row-between"><span>Every 1% of your pay you put towards <strong>debt</strong></span><strong>5 pts</strong></li>
           <li className="row-between"><span>Keep spending within your allowance</span><strong>100 pts</strong></li>
         </ul>
         {current && current.income > 0 && (
@@ -49,7 +50,8 @@ export default function PointsPage() {
               </div>
               <span className="muted small block">
                 Saved {money(s.saved, { whole: true })} ({s.saved_pct}%) · {s.points_saved} pts &nbsp;·&nbsp; Invested{" "}
-                {money(s.invested, { whole: true })} ({s.invested_pct}%) · {s.points_invested} pts &nbsp;·&nbsp; Within allowance{" "}
+                {money(s.invested, { whole: true })} ({s.invested_pct}%) · {s.points_invested} pts &nbsp;·&nbsp; Debt repaid{" "}
+                {money(s.debt, { whole: true })} ({s.debt_pct}%) · {s.points_debt} pts &nbsp;·&nbsp; Within allowance{" "}
                 {s.points_budget ? "✓ 100 pts" : s.income > 0 ? "✗" : "—"}
               </span>
             </li>

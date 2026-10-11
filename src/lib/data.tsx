@@ -94,6 +94,7 @@ export function AppDataProvider({ session, children }: { session: Session; child
         ...x,
         income: Number(x.income), spending: Number(x.spending), bills: Number(x.bills), saved: Number(x.saved),
         invested: Number(x.invested), debt: Number(x.debt ?? 0), net: Number(x.net), saved_pct: Number(x.saved_pct), invested_pct: Number(x.invested_pct),
+        debt_pct: Number(x.debt_pct ?? 0), points_debt: Number(x.points_debt ?? 0),
       })),
     );
     setTransactions((t.data ?? []).map((x) => ({ ...x, amount: Number(x.amount) })));
