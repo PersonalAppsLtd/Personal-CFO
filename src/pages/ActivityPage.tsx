@@ -10,6 +10,7 @@ const FILTERS: Array<{ id: string; label: string; kinds: Kind[] | null }> = [
   { id: "income", label: "Income", kinds: ["income"] },
   { id: "bills", label: "Bills", kinds: ["direct_debit", "standing_order", "bill"] },
   { id: "growth", label: "Saving & investing", kinds: ["saving", "investment"] },
+  { id: "debt", label: "Debt", kinds: ["debt_repayment"] },
 ];
 
 export default function ActivityPage() {

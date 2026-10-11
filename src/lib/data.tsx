@@ -93,7 +93,7 @@ export function AppDataProvider({ session, children }: { session: Session; child
       ((sc.data as PeriodScore[] | null) ?? []).map((x) => ({
         ...x,
         income: Number(x.income), spending: Number(x.spending), bills: Number(x.bills), saved: Number(x.saved),
-        invested: Number(x.invested), net: Number(x.net), saved_pct: Number(x.saved_pct), invested_pct: Number(x.invested_pct),
+        invested: Number(x.invested), debt: Number(x.debt ?? 0), net: Number(x.net), saved_pct: Number(x.saved_pct), invested_pct: Number(x.invested_pct),
       })),
     );
     setTransactions((t.data ?? []).map((x) => ({ ...x, amount: Number(x.amount) })));
