@@ -292,3 +292,11 @@ h3 { font-size: 1rem; }
 .payday-option { display: flex; align-items: center; gap: 0.75rem; text-align: left; border-radius: 12px; padding: 0.75rem 0.9rem; }
 .payday-option svg { flex-shrink: 0; color: var(--accent); }
 .payday-option.best { border-color: var(--brand); }
+
+/* Friends */
+.search-row { display: flex; gap: 0.5rem; }
+.search-row input { margin: 0; }
+.icon-only { display: inline-grid; place-items: center; padding: 0.55rem; flex-shrink: 0; }
+.person { display: flex; align-items: center; gap: 0.75rem; }
+.list > li.person { display: flex; }
+.person-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
