@@ -25,45 +25,66 @@ export default function BillsPage() {
       <section className="grid-3">
         <div className="stat">
           <span className="stat-label">Direct debits</span>
-          <span className="stat-value">{money(total("direct_debit"))}</span>
+          <span className="stat-value">{money(total("direct_debit"), { whole: true })}</span>
         </div>
         <div className="stat">
           <span className="stat-label">Standing orders</span>
-          <span className="stat-value">{money(total("standing_order"))}</span>
+          <span className="stat-value">{money(total("standing_order"), { whole: true })}</span>
         </div>
         <div className="stat">
           <span className="stat-label">Still due before payday</span>
-          <span className="stat-value">{money(status?.bills_due)}</span>
+          <span className="stat-value">{money(status?.bills_due, { whole: true })}</span>
         </div>
       </section>
 
-      <section className="card">
-        <h2>Direct debits &amp; standing orders</h2>
-        {sorted.length === 0 ? (
-          <p className="muted">No direct debits or standing orders found yet. Some banks don't share these; they'll still show up in Activity when they're paid.</p>
-        ) : (
-          <ul className="list">
-            {sorted.map((r) => {
-              const next = nextDate(r);
-              return (
-                <li key={r.id} className="row-between">
-                  <span>
-                    {r.payee}
-                    <span className="muted small block">
-                      {r.type === "direct_debit" ? "Direct debit" : "Standing order"}
-                      {r.frequency ? ` · ${r.frequency}` : ""}
-                      {next ? ` · next ${next.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}${r.next_payment_date ? "" : " (estimated)"}` : ""}
-                    </span>
-                  </span>
-                  <span>{r.amount != null ? money(r.amount) : "—"}</span>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
+      <RecurringList
+        title="Direct debits"
+        items={sorted.filter((r) => r.type === "direct_debit")}
+        total={total("direct_debit")}
+        empty="No direct debits found yet. Some banks don't share these; they'll still show up in Activity when they're paid."
+      />
+      <RecurringList
+        title="Standing orders"
+        items={sorted.filter((r) => r.type === "standing_order")}
+        total={total("standing_order")}
+        empty="No standing orders found yet. Some banks don't share these; they'll still show up in Activity when they're paid."
+      />
 
       <CardBills />
     </div>
+  );
+}
+
+function RecurringList({ title, items, total, empty }: { title: string; items: RecurringPayment[]; total: number; empty: string }) {
+  return (
+    <section className="card">
+      <div className="row-between">
+        <h2>{title}</h2>
+        {items.length > 0 && <strong>{money(total)}</strong>}
+      </div>
+      {items.length === 0 ? (
+        <p className="muted small">{empty}</p>
+      ) : (
+        <ul className="list">
+          {items.map((r) => {
+            const next = nextDate(r);
+            const details = [
+              r.frequency,
+              next && `next ${next.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}${r.next_payment_date ? "" : " (estimated)"}`,
+              r.reference && `ref ${r.reference}`,
+            ].filter(Boolean);
+            return (
+              <li key={r.id} className="row-between">
+                <span>
+                  {r.payee}
+                  {details.length > 0 && <span className="muted small block">{details.join(" · ")}</span>}
+                </span>
+                <span>{r.amount != null ? money(r.amount) : "—"}</span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
   );
 }
