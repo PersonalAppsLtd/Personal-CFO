@@ -283,3 +283,12 @@ h3 { font-size: 1rem; }
 .hint { margin-top: 0.75rem; font-size: 0.82rem; color: var(--muted); }
 
 .card .section-gap { margin-top: 1.5rem; }
+
+/* Payday leftover */
+.payday { border: 2px solid var(--brand); }
+.eyebrow-text { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.75rem; color: var(--accent); font-weight: 700; }
+.payday-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+@media (max-width: 520px) { .payday-options { grid-template-columns: 1fr; } }
+.payday-option { display: flex; align-items: center; gap: 0.75rem; text-align: left; border-radius: 12px; padding: 0.75rem 0.9rem; }
+.payday-option svg { flex-shrink: 0; color: var(--accent); }
+.payday-option.best { border-color: var(--brand); }

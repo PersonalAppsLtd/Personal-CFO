@@ -142,3 +142,13 @@ export interface WeeklyXp {
   budget_days: number;
   total: number;
 }
+
+export interface PaydayPrompt {
+  period_start: string;
+  previous_start: string;
+  previous_end: string;
+  leftover: number;
+  income: number;
+  save_points: number;
+  invest_points: number;
+}
