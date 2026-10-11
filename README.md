@@ -8,6 +8,7 @@ A personal finance app that makes card and contactless spending feel like cash.
 - **Bills**: direct debits and standing orders, plus regular costs paid by card (fuel, groceries, parking) with a monthly budget. None of these come out of the spending allowance; whatever is left in each budget counts towards bills still due before payday. Fuel stations are recognised automatically.
 - **Cash flow**: where each pay period's income went: bills, spending, saving and investing.
 - **Points**: 10 points per 1% of income saved, 20 points per 1% invested, and 100 bonus points for staying within your allowance. Levels go from Starter up to Personal CFO.
+- **Leagues**: weekly leaderboards modelled on Personal CEO. Ten tiers from Intern up to Elite, each with 9 simulated rivals. XP comes from saving (10 XP per 1% of monthly income), investing (20 XP per 1%) and each day spent within the daily allowance (15 XP). Every Monday the top 3 move up a league and the bottom 3 move down.
 - **Demo mode**: try everything with realistic sample data before connecting a bank.
 
 ## How it fits together

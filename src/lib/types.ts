@@ -14,7 +14,10 @@ export const KIND_LABELS: Record<Kind, string> = {
 export interface Profile {
   id: string;
   display_name: string | null;
+  username: string | null;
   company: string | null;
+  job_title: string | null;
+  current_tier_id: number;
   date_of_birth: string | null;
   avatar_url: string | null;
   currency: string;
@@ -112,4 +115,30 @@ export interface BillBudget {
   name: string;
   monthly_amount: number;
   keywords: string[];
+}
+
+export interface LadderTier {
+  tier_id: number;
+  rank: number;
+  name: string | null;
+  unlocked: boolean;
+  is_current: boolean;
+}
+
+export interface LeaderboardRow {
+  rank: number;
+  user_id: string;
+  full_name: string;
+  avatar_url: string | null;
+  weekly_xp: number;
+  is_me: boolean;
+  is_bot: boolean;
+}
+
+export interface WeeklyXp {
+  saving_xp: number;
+  investing_xp: number;
+  budget_xp: number;
+  budget_days: number;
+  total: number;
 }
