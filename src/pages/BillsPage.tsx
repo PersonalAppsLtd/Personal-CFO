@@ -1,23 +1,37 @@
+import { useState } from "react";
 import { useApp } from "../lib/data";
 import { money } from "../lib/money";
+import { nextDate } from "../lib/bills";
 import type { RecurringPayment } from "../lib/types";
+import BillsCalendar from "../components/BillsCalendar";
 import CardBills from "../components/CardBills";
 
-function nextDate(r: RecurringPayment): Date | null {
-  if (r.next_payment_date) return new Date(r.next_payment_date + "T00:00:00");
-  if (r.last_payment_at) {
-    const d = new Date(r.last_payment_at);
-    d.setMonth(d.getMonth() + 1);
-    return d;
+type View = "list" | "calendar";
+const VIEW_KEY = "bills-view";
+
+function savedView(): View {
+  try {
+    return localStorage.getItem(VIEW_KEY) === "calendar" ? "calendar" : "list";
+  } catch {
+    return "list";
   }
-  return null;
 }
 
 export default function BillsPage() {
   const { recurring, status } = useApp();
   const active = recurring.filter((r) => (r.status ?? "active").toLowerCase() === "active");
   const sorted = [...active].sort((a, b) => (nextDate(a)?.getTime() ?? Infinity) - (nextDate(b)?.getTime() ?? Infinity));
+  const [view, setView] = useState<View>(savedView);
   const total = (type: RecurringPayment["type"]) => active.filter((r) => r.type === type).reduce((s, r) => s + (r.amount ?? 0), 0);
+
+  function chooseView(v: View) {
+    setView(v);
+    try {
+      localStorage.setItem(VIEW_KEY, v);
+    } catch {
+      // Private mode: the choice just won't be remembered.
+    }
+  }
 
   return (
     <div className="stack-lg">
@@ -37,18 +51,32 @@ export default function BillsPage() {
         </div>
       </section>
 
-      <RecurringList
-        title="Direct debits"
-        items={sorted.filter((r) => r.type === "direct_debit")}
-        total={total("direct_debit")}
-        empty="No direct debits found yet. Some banks don't share these; they'll still show up in Activity when they're paid."
-      />
-      <RecurringList
-        title="Standing orders"
-        items={sorted.filter((r) => r.type === "standing_order")}
-        total={total("standing_order")}
-        empty="No standing orders found yet. Some banks don't share these; they'll still show up in Activity when they're paid."
-      />
+      <div className="chips" role="tablist" aria-label="View">
+        {(["list", "calendar"] as const).map((v) => (
+          <button key={v} role="tab" aria-selected={view === v} className={view === v ? "chip active" : "chip"} onClick={() => chooseView(v)}>
+            {v === "list" ? "List" : "Calendar"}
+          </button>
+        ))}
+      </div>
+
+      {view === "calendar" ? (
+        <BillsCalendar items={sorted} />
+      ) : (
+        <>
+          <RecurringList
+            title="Direct debits"
+            items={sorted.filter((r) => r.type === "direct_debit")}
+            total={total("direct_debit")}
+            empty="No direct debits found yet. Some banks don't share these; they'll still show up in Activity when they're paid."
+          />
+          <RecurringList
+            title="Standing orders"
+            items={sorted.filter((r) => r.type === "standing_order")}
+            total={total("standing_order")}
+            empty="No standing orders found yet. Some banks don't share these; they'll still show up in Activity when they're paid."
+          />
+        </>
+      )}
 
       <CardBills />
     </div>
