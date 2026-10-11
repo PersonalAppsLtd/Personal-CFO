@@ -8,6 +8,7 @@ const SERIES = [
   { key: "spending", label: "Spending", color: "var(--series-2)" },
   { key: "saved", label: "Saved", color: "var(--series-3)" },
   { key: "invested", label: "Invested", color: "var(--series-4)" },
+  { key: "debt", label: "Debt repaid", color: "var(--series-5)" },
 ] as const;
 
 const label = (p: PeriodScore) =>
@@ -20,7 +21,7 @@ export default function CashFlowPage() {
   const current = scores.find((s) => s.is_current);
 
   const W = 380, H = 220, padL = 44, padB = 24, padT = 10;
-  const max = Math.max(1, ...scores.map((s) => Math.max(s.income, s.bills + s.spending + s.saved + s.invested)));
+  const max = Math.max(1, ...scores.map((s) => Math.max(s.income, s.bills + s.spending + s.saved + s.invested + s.debt)));
   const nice = Math.ceil(max / 500) * 500;
   const y = (v: number) => padT + (H - padT - padB) * (1 - v / nice);
   const slot = (W - padL) / Math.max(1, scores.length);
@@ -38,7 +39,7 @@ export default function CashFlowPage() {
           </div>
           <div className="stat">
             <span className="stat-label">Out this period</span>
-            <span className="stat-value">{money(current.bills + current.spending + current.saved + current.invested, { whole: true })}</span>
+            <span className="stat-value">{money(current.bills + current.spending + current.saved + current.invested + current.debt, { whole: true })}</span>
           </div>
           <div className="stat">
             <span className="stat-label">Left over</span>
@@ -63,7 +64,7 @@ export default function CashFlowPage() {
           <div className="table-wrap">
             <table>
               <thead>
-                <tr><th>Period from</th><th>Income</th><th>Bills</th><th>Spending</th><th>Saved</th><th>Invested</th><th>Left over</th></tr>
+                <tr><th>Period from</th><th>Income</th><th>Bills</th><th>Spending</th><th>Saved</th><th>Invested</th><th>Debt repaid</th><th>Left over</th></tr>
               </thead>
               <tbody>
                 {scores.map((s) => (
@@ -74,6 +75,7 @@ export default function CashFlowPage() {
                     <td>{money(s.spending, { whole: true })}</td>
                     <td>{money(s.saved, { whole: true })}</td>
                     <td>{money(s.invested, { whole: true })}</td>
+                    <td>{money(s.debt, { whole: true })}</td>
                     <td>{money(s.net, { whole: true })}</td>
                   </tr>
                 ))}
@@ -82,7 +84,7 @@ export default function CashFlowPage() {
           </div>
         ) : (
           <div className="chart-box">
-            <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Stacked bars of bills, spending, saving and investing per pay period, with income marked">
+            <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Stacked bars of bills, spending, saving, investing and debt repayments per pay period, with income marked">
               {ticks.map((t) => (
                 <g key={t}>
                   <line x1={padL} x2={W} y1={y(t)} y2={y(t)} className="grid" />

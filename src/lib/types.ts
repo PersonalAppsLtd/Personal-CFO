@@ -1,4 +1,4 @@
-export type Kind = "income" | "spending" | "direct_debit" | "standing_order" | "bill" | "saving" | "investment" | "transfer";
+export type Kind = "income" | "spending" | "direct_debit" | "standing_order" | "bill" | "saving" | "investment" | "debt_repayment" | "transfer";
 
 export const KIND_LABELS: Record<Kind, string> = {
   income: "Income",
@@ -8,6 +8,7 @@ export const KIND_LABELS: Record<Kind, string> = {
   bill: "Regular bill",
   saving: "Saving",
   investment: "Investing",
+  debt_repayment: "Debt repayment",
   transfer: "Transfer",
 };
 
@@ -92,6 +93,7 @@ export interface PeriodScore {
   bills: number;
   saved: number;
   invested: number;
+  debt: number;
   net: number;
   saved_pct: number;
   invested_pct: number;
@@ -138,6 +140,7 @@ export interface LeaderboardRow {
 export interface WeeklyXp {
   saving_xp: number;
   investing_xp: number;
+  debt_xp: number;
   budget_xp: number;
   budget_days: number;
   total: number;

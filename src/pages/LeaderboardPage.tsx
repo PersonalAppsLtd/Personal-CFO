@@ -116,6 +116,10 @@ export default function LeaderboardPage() {
             <strong>{xp?.investing_xp ?? 0} XP</strong>
           </li>
           <li className="row-between">
+            <span>Paying off debt <span className="muted small block">10 XP for every 1% put towards credit cards and loans</span></span>
+            <strong>{xp?.debt_xp ?? 0} XP</strong>
+          </li>
+          <li className="row-between">
             <span>
               Days within your allowance
               <span className="muted small block">15 XP for each finished day ({xp?.budget_days ?? 0} so far)</span>
