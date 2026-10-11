@@ -25,6 +25,8 @@ export default function PersonalDetails() {
   const [company, setCompany] = useState(profile?.company ?? "");
   const [dob, setDob] = useState(profile?.date_of_birth ?? "");
   const [jobTitle, setJobTitle] = useState(profile?.job_title ?? "");
+  const [email, setEmail] = useState(session.user.email ?? "");
+  const pendingEmail = session.user.new_email;
   const [message, setMessage] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -47,8 +49,19 @@ export default function PersonalDetails() {
       company: company.trim() || null,
       job_title: jobTitle.trim() || null,
     });
-    if (err && /profiles_username_unique|duplicate key/.test(err)) setMessage("That username is already taken.");
-    else setMessage(err ?? "Saved.");
+    if (err) {
+      setMessage(/profiles_username_unique|duplicate key/.test(err) ? "That username is already taken." : err);
+      return;
+    }
+
+    // Changing the sign-in email needs confirming from the inbox before it takes effect
+    const newEmail = email.trim().toLowerCase();
+    if (newEmail && newEmail !== (session.user.email ?? "").toLowerCase()) {
+      const { error } = await supabase.auth.updateUser({ email: newEmail }, { emailRedirectTo: `${window.location.origin}/settings` });
+      setMessage(error ? error.message : `Saved. We've sent a link to ${newEmail}: open it to finish changing your email.`);
+      return;
+    }
+    setMessage("Saved.");
   }
 
   // Replace everything in the user's folder so old pictures don't pile up
@@ -131,6 +144,11 @@ export default function PersonalDetails() {
         Date of birth
         <input type="date" autoComplete="bday" min="1900-01-01" max={today} value={dob} onChange={(e) => setDob(e.target.value)} />
       </label>
+      <label>
+        Email address
+        <input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      {pendingEmail && <p className="muted small">Waiting for you to confirm the change to {pendingEmail}.</p>}
       <label>
         Company name
         <input type="text" autoComplete="organization" maxLength={120} value={company} onChange={(e) => setCompany(e.target.value)} />
