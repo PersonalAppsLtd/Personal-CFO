@@ -141,15 +141,15 @@ label.check input { width: auto; margin: 0; }
 .list > li { padding: 0.7rem 0; border-top: 1px solid var(--line); }
 .list > li:first-child { border-top: 0; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+.stat { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; }
+.stat-label { color: var(--muted); font-size: 0.82rem; }
+.stat-value { font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
 @media (max-width: 520px) {
   .grid-3 { gap: 0.5rem; }
   .stat { padding: 10px; }
   .stat-value { font-size: 0.95rem; letter-spacing: -0.01em; }
   .stat-label { font-size: 0.75rem; }
 }
-.stat { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; }
-.stat-label { color: var(--muted); font-size: 0.82rem; }
-.stat-value { font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* Hero number */
 .hero { background: var(--brand); color: var(--brand-ink); border-radius: 22px; padding: 24px 20px; }
@@ -317,3 +317,9 @@ h3 { font-size: 1rem; }
 .cal-day.selected { border-color: var(--brand); }
 .cal-amount { font-size: 0.7rem; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 420px) { .cal-amount { font-size: 0.62rem; } .cal-day { min-height: 48px; } }
+
+/* Home */
+.hero-link { display: block; text-decoration: none; }
+.stat-link { text-decoration: none; color: inherit; }
+.stat-link:hover { border-color: var(--brand); }
+@media (max-width: 720px) { .grid-2-stack { grid-template-columns: 1fr; } }
