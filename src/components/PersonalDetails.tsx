@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useApp } from "../lib/data";
 import { supabase } from "../supabase";
 import { USERNAME_HINT, USERNAME_PATTERN } from "../lib/money";
@@ -27,12 +27,15 @@ export default function PersonalDetails() {
   const [email, setEmail] = useState(session.user.email ?? "");
   const pendingEmail = session.user.new_email;
   const [message, setMessage] = useState<string | null>(null);
+  const [companyMessage, setCompanyMessage] = useState<string | null>(null);
+  const [saving, setSaving] = useState<"personal" | "company" | null>(null);
   const [pictureMessage, setPictureMessage] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const today = new Date().toISOString().slice(0, 10);
 
-  async function save() {
+  async function savePersonal(e: FormEvent) {
+    e.preventDefault();
     const handle = username.trim();
     if (handle && !USERNAME_PATTERN.test(handle)) {
       setMessage(`Usernames are ${USERNAME_HINT.toLowerCase()}`);
@@ -42,14 +45,15 @@ export default function PersonalDetails() {
       setMessage("Date of birth can't be in the future.");
       return;
     }
+    setSaving("personal");
+    setMessage(null);
     const err = await updateProfile({
       username: handle || null,
       display_name: name.trim() || null,
       date_of_birth: dob || null,
-      company: company.trim() || null,
-      job_title: jobTitle.trim() || null,
     });
     if (err) {
+      setSaving(null);
       setMessage(/profiles_username_unique|duplicate key/.test(err) ? "That username is already taken." : err);
       return;
     }
@@ -58,10 +62,21 @@ export default function PersonalDetails() {
     const newEmail = email.trim().toLowerCase();
     if (newEmail && newEmail !== (session.user.email ?? "").toLowerCase()) {
       const { error } = await supabase.auth.updateUser({ email: newEmail }, { emailRedirectTo: `${window.location.origin}/settings` });
+      setSaving(null);
       setMessage(error ? error.message : `Saved. We've sent a link to ${newEmail}: open it to finish changing your email.`);
       return;
     }
-    setMessage("Saved.");
+    setSaving(null);
+    setMessage("Personal details saved.");
+  }
+
+  async function saveCompany(e: FormEvent) {
+    e.preventDefault();
+    setSaving("company");
+    setCompanyMessage(null);
+    const err = await updateProfile({ company: company.trim() || null, job_title: jobTitle.trim() || null });
+    setSaving(null);
+    setCompanyMessage(err ?? "Company details saved.");
   }
 
   // Replace everything in the user's folder so old pictures don't pile up
@@ -136,8 +151,12 @@ export default function PersonalDetails() {
         {pictureMessage && <p className="muted small">{pictureMessage}</p>}
       </section>
 
-      <section className="card stack">
-        <h2>Personal information</h2>
+      <form className="card stack" onSubmit={savePersonal}>
+        <h2>Personal details</h2>
+        <label>
+          Username
+          <input type="text" autoComplete="username" autoCapitalize="none" spellCheck={false} maxLength={30} value={username} onChange={(e) => setUsername(e.target.value)} />
+        </label>
         <label>
           Full name
           <input type="text" autoComplete="name" maxLength={80} value={name} onChange={(e) => setName(e.target.value)} />
@@ -147,16 +166,20 @@ export default function PersonalDetails() {
           <input type="date" autoComplete="bday" min="1900-01-01" max={today} value={dob} onChange={(e) => setDob(e.target.value)} />
         </label>
         <label>
-          Username
-          <input type="text" autoComplete="username" autoCapitalize="none" spellCheck={false} maxLength={30} value={username} onChange={(e) => setUsername(e.target.value)} />
-        </label>
-        <label>
           Email
           <input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
         {pendingEmail && <p className="muted small">Waiting for you to confirm the change to {pendingEmail}.</p>}
+        <div className="row-end">
+          {message && <span className="muted small">{message}</span>}
+          <button type="submit" className="primary" disabled={saving !== null}>
+            {saving === "personal" ? "Saving…" : "Save personal details"}
+          </button>
+        </div>
+      </form>
 
-        <h2 className="section-gap">Company information</h2>
+      <form className="card stack" onSubmit={saveCompany}>
+        <h2>Company details</h2>
         <label>
           Company
           <input type="text" autoComplete="organization" maxLength={120} value={company} onChange={(e) => setCompany(e.target.value)} />
@@ -166,10 +189,12 @@ export default function PersonalDetails() {
           <input type="text" autoComplete="organization-title" maxLength={100} value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} />
         </label>
         <div className="row-end">
-          {message && <span className="muted small">{message}</span>}
-          <button className="primary" onClick={save}>Save</button>
+          {companyMessage && <span className="muted small">{companyMessage}</span>}
+          <button type="submit" className="primary" disabled={saving !== null}>
+            {saving === "company" ? "Saving…" : "Save company details"}
+          </button>
         </div>
-      </section>
+      </form>
     </>
   );
 }

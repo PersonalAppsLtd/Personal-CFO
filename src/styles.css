@@ -282,7 +282,6 @@ h3 { font-size: 1rem; }
 .leaderboard .points { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
 .hint { margin-top: 0.75rem; font-size: 0.82rem; color: var(--muted); }
 
-.card .section-gap { margin-top: 1.5rem; }
 
 /* Payday leftover */
 .payday { border: 2px solid var(--brand); }
