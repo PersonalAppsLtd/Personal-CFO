@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Edit",
+      "Write",
+      "WebFetch",
+      "mcp__Supabase",
+      "mcp__github",
+      "mcp__Cloudflare_Developer_Platform",
+      "mcp__claude-code-remote__add_repo"
+    ]
+  }
+}
