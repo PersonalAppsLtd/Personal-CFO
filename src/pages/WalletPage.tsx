@@ -4,6 +4,7 @@ import { useApp } from "../lib/data";
 import { money, signedMoney, spendingPace } from "../lib/money";
 import { supabase } from "../supabase";
 import Wallet from "../components/Wallet";
+import PaydayCard from "../components/PaydayCard";
 
 const PACE_TEXT = {
   ahead: "You're spending slower than the month is passing. Nice.",
@@ -31,6 +32,7 @@ export default function WalletPage() {
 
   return (
     <div className="stack-lg">
+      <PaydayCard />
       <section className={`hero ${status.remaining < 0 ? "hero-over" : ""}`}>
         <p className="eyebrow">Left to spend until payday</p>
         <p className="hero-amount">{money(status.remaining)}</p>
