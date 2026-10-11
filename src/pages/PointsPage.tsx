@@ -1,22 +1,23 @@
 import { useApp } from "../lib/data";
-import { levelFor, money } from "../lib/money";
+import { Link } from "react-router-dom";
+import { useCurrentLeague } from "../lib/league";
+import { money } from "../lib/money";
 
 export default function PointsPage() {
   const { scores } = useApp();
   const total = scores.reduce((s, p) => s + p.points_total, 0);
-  const level = levelFor(total);
-  const toNext = level.next != null ? level.next - total : 0;
-  const progress = level.next != null ? (total - level.min) / (level.next - level.min) : 1;
+  const league = useCurrentLeague();
   const current = scores.find((s) => s.is_current);
 
   return (
     <div className="stack-lg">
       <h1>Points</h1>
       <section className="hero">
-        <p className="eyebrow">{level.name}</p>
+        <p className="eyebrow">{league ?? "Points"}</p>
         <p className="hero-amount">{total.toLocaleString("en-GB")} pts</p>
-        <div className="meter" aria-hidden><div style={{ width: `${Math.min(100, progress * 100)}%` }} /></div>
-        <p className="hero-sub">{level.next != null ? `${toNext.toLocaleString("en-GB")} points to the next level` : "Top level reached"}</p>
+        <p className="hero-sub">
+          Climb the divisions on the <Link to="/leaderboard">leaderboard</Link>
+        </p>
       </section>
 
       <section className="card">

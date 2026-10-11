@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useApp } from "../lib/data";
 import { occurrencesBetween } from "../lib/bills";
-import { levelFor, money, signedMoney, spendingPace } from "../lib/money";
+import { useCurrentLeague } from "../lib/league";
+import { money, signedMoney, spendingPace } from "../lib/money";
 import type { RecurringPayment } from "../lib/types";
 import PaydayCard from "../components/PaydayCard";
 
@@ -18,6 +19,7 @@ function greeting(now = new Date()): string {
 
 /** At-a-glance summary of everything else in the app, each part linking to its full page. */
 export default function HomePage() {
+  const league = useCurrentLeague();
   const { profile, status, accounts, connections, recurring, scores, transactions, syncing } = useApp();
   if (!status) return <p>Loading…</p>;
 
@@ -30,7 +32,6 @@ export default function HomePage() {
   const saved = sum(["savings", "investment"]);
 
   const points = scores.reduce((s, p) => s + p.points_total, 0);
-  const level = levelFor(points);
 
   // Bills going out in the next 14 days, soonest first.
   const today = new Date();
@@ -72,7 +73,7 @@ export default function HomePage() {
           <span className="stat-value">{money(saved, { whole: true })}</span>
         </Link>
         <Link to="/points" className="stat stat-link">
-          <span className="stat-label">Points · {level.name}</span>
+          <span className="stat-label">{league ? `Points · ${league}` : "Points"}</span>
           <span className="stat-value">{points.toLocaleString("en-GB")}</span>
         </Link>
       </section>
