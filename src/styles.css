@@ -300,3 +300,20 @@ h3 { font-size: 1rem; }
 .person { display: flex; align-items: center; gap: 0.75rem; }
 .list > li.person { display: flex; }
 .person-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+/* Bills calendar */
+.cal-nav { display: flex; align-items: center; gap: 0.25rem; min-width: 0; }
+.cal-nav h2 { min-width: 9.5em; text-align: center; }
+.icon-nav { padding: 6px; display: grid; place-items: center; border-radius: 50%; }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal-head { text-align: center; font-size: 0.75rem; color: var(--muted); padding-bottom: 2px; }
+.cal-day {
+  min-width: 0; min-height: 56px; padding: 6px 4px; border-radius: 10px; border: 1px solid transparent;
+  background: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 0.85rem;
+}
+.cal-day:hover { background: var(--surface-2); }
+.cal-day.has-bills { background: var(--warn-bg); }
+.cal-day.today .cal-date { color: var(--brand); font-weight: 800; }
+.cal-day.selected { border-color: var(--brand); }
+.cal-amount { font-size: 0.7rem; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 420px) { .cal-amount { font-size: 0.62rem; } .cal-day { min-height: 48px; } }
