@@ -4,6 +4,8 @@ import { supabase } from "../supabase";
 
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 const MAX_BYTES = 2 * 1024 * 1024;
+// Same rule as Personal CEO
+const USERNAME_PATTERN = /^[A-Za-z0-9_.]{3,30}$/;
 
 function initials(name: string | null | undefined, email: string | undefined): string {
   const source = name?.trim() || email || "?";
@@ -18,25 +20,35 @@ function initials(name: string | null | undefined, email: string | undefined): s
 export default function PersonalDetails() {
   const { profile, session, updateProfile } = useApp();
   const userId = session.user.id;
+  const [username, setUsername] = useState(profile?.username ?? "");
   const [name, setName] = useState(profile?.display_name ?? "");
   const [company, setCompany] = useState(profile?.company ?? "");
   const [dob, setDob] = useState(profile?.date_of_birth ?? "");
+  const [jobTitle, setJobTitle] = useState(profile?.job_title ?? "");
   const [message, setMessage] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const today = new Date().toISOString().slice(0, 10);
 
   async function save() {
+    const handle = username.trim();
+    if (handle && !USERNAME_PATTERN.test(handle)) {
+      setMessage("Usernames are 3–30 characters: letters, numbers, dots and underscores.");
+      return;
+    }
     if (dob && dob > today) {
       setMessage("Date of birth can't be in the future.");
       return;
     }
     const err = await updateProfile({
+      username: handle || null,
       display_name: name.trim() || null,
-      company: company.trim() || null,
       date_of_birth: dob || null,
+      company: company.trim() || null,
+      job_title: jobTitle.trim() || null,
     });
-    setMessage(err ?? "Saved.");
+    if (err && /profiles_username_unique|duplicate key/.test(err)) setMessage("That username is already taken.");
+    else setMessage(err ?? "Saved.");
   }
 
   // Replace everything in the user's folder so old pictures don't pile up
@@ -85,7 +97,7 @@ export default function PersonalDetails() {
         {profile?.avatar_url ? (
           <img className="avatar" src={profile.avatar_url} alt="Your profile picture" />
         ) : (
-          <div className="avatar avatar-initials" aria-hidden>{initials(profile?.display_name, session.user.email)}</div>
+          <div className="avatar avatar-initials" aria-hidden>{initials(profile?.display_name || profile?.username, session.user.email)}</div>
         )}
         <div className="row-wrap">
           <button type="button" onClick={() => fileInput.current?.click()} disabled={uploading}>
@@ -108,16 +120,24 @@ export default function PersonalDetails() {
         />
       </div>
       <label>
-        Name
-        <input type="text" autoComplete="name" maxLength={80} value={name} onChange={(e) => setName(e.target.value)} />
+        Username
+        <input type="text" autoComplete="username" autoCapitalize="none" spellCheck={false} maxLength={30} value={username} onChange={(e) => setUsername(e.target.value)} />
       </label>
       <label>
-        Company
-        <input type="text" autoComplete="organization" maxLength={120} value={company} onChange={(e) => setCompany(e.target.value)} />
+        Full name
+        <input type="text" autoComplete="name" maxLength={80} value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label>
         Date of birth
         <input type="date" autoComplete="bday" min="1900-01-01" max={today} value={dob} onChange={(e) => setDob(e.target.value)} />
+      </label>
+      <label>
+        Company name
+        <input type="text" autoComplete="organization" maxLength={120} value={company} onChange={(e) => setCompany(e.target.value)} />
+      </label>
+      <label>
+        Job title
+        <input type="text" autoComplete="organization-title" maxLength={100} value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} />
       </label>
       <div className="row-end">
         {message && <span className="muted small">{message}</span>}
