@@ -97,8 +97,10 @@ export interface PeriodScore {
   net: number;
   saved_pct: number;
   invested_pct: number;
+  debt_pct: number;
   points_saved: number;
   points_invested: number;
+  points_debt: number;
   points_budget: number;
   points_total: number;
   is_current: boolean;
