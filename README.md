@@ -10,6 +10,7 @@ A personal finance app that makes card and contactless spending feel like cash.
 - **Points**: 10 points per 1% of income saved, 20 points per 1% invested, and 100 bonus points for staying within your allowance. Levels go from Starter up to Personal CFO.
 - **Payday leftovers**: when the new pay arrives and last period's allowance wasn't all spent, the Wallet (and a notification) asks what to do with it: invest it, save it, add it to this month's allowance, or leave it. Saving or investing it earns points and league XP once the transfer shows up.
 - **Leagues**: weekly leaderboards modelled on Personal CEO. Ten tiers from Intern up to Elite, each with 9 simulated rivals. XP comes from saving (10 XP per 1% of monthly income), investing (20 XP per 1%) and each day spent within the daily allowance (15 XP). Every Monday the top 3 move up a league and the bottom 3 move down.
+- **Friends**: add friends by username (like Personal CEO), accept or decline requests, and compare weekly XP and leagues on a friends-only leaderboard. Friends never see money amounts.
 - **Demo mode**: try everything with realistic sample data before connecting a bank.
 
 ## How it fits together

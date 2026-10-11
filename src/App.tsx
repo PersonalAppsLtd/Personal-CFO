@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
-import { CalendarDays, ChartColumn, Landmark, Network, Receipt, Settings, Trophy, Wallet } from "lucide-react";
+import { CalendarDays, ChartColumn, Handshake, Landmark, Network, Receipt, Settings, Trophy, Wallet } from "lucide-react";
 import { supabase } from "./supabase";
 import { AppDataProvider, useApp } from "./lib/data";
 import AuthPage from "./pages/AuthPage";
@@ -11,6 +11,7 @@ import BillsPage from "./pages/BillsPage";
 import CashFlowPage from "./pages/CashFlowPage";
 import PointsPage from "./pages/PointsPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
+import FriendsPage from "./pages/FriendsPage";
 import AccountsPage from "./pages/AccountsPage";
 import SettingsPage from "./pages/SettingsPage";
 import OnboardingPage from "./pages/OnboardingPage";
@@ -40,6 +41,7 @@ const NAV = [
   { to: "/cash-flow", label: "Cash flow", Icon: ChartColumn },
   { to: "/points", label: "Points", Icon: Trophy },
   { to: "/leaderboard", label: "Leaderboard", Icon: Network },
+  { to: "/friends", label: "Friends", Icon: Handshake },
   { to: "/accounts", label: "Accounts", Icon: Landmark },
   { to: "/settings", label: "Settings", Icon: Settings },
 ];
@@ -97,6 +99,7 @@ function Shell() {
           <Route path="/cash-flow" element={<CashFlowPage />} />
           <Route path="/points" element={<PointsPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/friends" element={<FriendsPage />} />
           <Route path="/accounts" element={<AccountsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
