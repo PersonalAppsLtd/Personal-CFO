@@ -1,11 +1,10 @@
 import { useRef, useState } from "react";
 import { useApp } from "../lib/data";
 import { supabase } from "../supabase";
+import { USERNAME_HINT, USERNAME_PATTERN } from "../lib/money";
 
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 const MAX_BYTES = 2 * 1024 * 1024;
-// Same rule as Personal CEO
-const USERNAME_PATTERN = /^[A-Za-z0-9_.]{3,30}$/;
 
 function initials(name: string | null | undefined, email: string | undefined): string {
   const source = name?.trim() || email || "?";
@@ -36,7 +35,7 @@ export default function PersonalDetails() {
   async function save() {
     const handle = username.trim();
     if (handle && !USERNAME_PATTERN.test(handle)) {
-      setMessage("Usernames are 3–30 characters: letters, numbers, dots and underscores.");
+      setMessage(`Usernames are ${USERNAME_HINT.toLowerCase()}`);
       return;
     }
     if (dob && dob > today) {

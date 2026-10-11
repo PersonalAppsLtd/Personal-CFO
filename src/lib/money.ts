@@ -100,3 +100,7 @@ export function matchesKeywords(text: string, keywords: string[]): boolean {
 export function parseKeywords(input: string): string[] {
   return [...new Set(input.split(",").map((k) => k.trim().toLowerCase()).filter((k) => k.length >= 2))];
 }
+
+/** Same username rule as Personal CEO: 3-30 letters, numbers, dots or underscores. */
+export const USERNAME_PATTERN = /^[A-Za-z0-9_.]{3,30}$/;
+export const USERNAME_HINT = "3–30 characters: letters, numbers, dots and underscores.";

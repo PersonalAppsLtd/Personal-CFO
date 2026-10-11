@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { levelFor, matchesKeywords, money, parseKeywords, pickDenomination, signedMoney, spendingPace, suggestAllowance, walletNotes } from "./money";
+import { USERNAME_PATTERN, levelFor, matchesKeywords, money, parseKeywords, pickDenomination, signedMoney, spendingPace, suggestAllowance, walletNotes } from "./money";
 
 describe("money formatting", () => {
   it("formats pounds", () => {
@@ -76,5 +76,14 @@ describe("bill keywords", () => {
 
   it("parses a typed list", () => {
     expect(parseKeywords(" Shell, BP ,, e, shell")).toEqual(["shell", "bp"]);
+  });
+});
+
+describe("usernames", () => {
+  it("follows the Personal CEO rule", () => {
+    expect(USERNAME_PATTERN.test("liam.allen")).toBe(true);
+    expect(USERNAME_PATTERN.test("li")).toBe(false);
+    expect(USERNAME_PATTERN.test("liam allen")).toBe(false);
+    expect(USERNAME_PATTERN.test("a".repeat(31))).toBe(false);
   });
 });
