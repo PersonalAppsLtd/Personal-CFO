@@ -13,6 +13,7 @@
   --note: #a9bcf7;
   --note-ink: #0f2470;
   --neg: #b42318;
+  --promote: #13804f;
   --pos: var(--ink);
   --warn-bg: #eef2fe;
   --series-1: #2a78d6;
@@ -41,6 +42,7 @@
     --note: #3d5fd6;
     --note-ink: #f2f5ff;
     --neg: #ff8a80;
+    --promote: #4cc38a;
     --pos: var(--ink);
     --warn-bg: #1c2340;
     --series-1: #3987e5;
@@ -66,6 +68,7 @@
   --note: #3d5fd6;
   --note-ink: #f2f5ff;
   --neg: #ff8a80;
+  --promote: #4cc38a;
   --pos: var(--ink);
   --warn-bg: #1c2340;
   --series-1: #3987e5;
@@ -326,3 +329,10 @@ h3 { font-size: 1rem; }
 .stat-link:hover { border-color: var(--brand); }
 @media (max-width: 720px) { .grid-2-stack { grid-template-columns: 1fr; } }
 .league-badge.unlocked .league-shield svg { filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 0.3)); }
+.leaderboard li.zone-up, .leaderboard li.zone-down { border-radius: 0 10px 10px 0; }
+.leaderboard li.zone-up { box-shadow: inset 3px 0 0 var(--promote); }
+.leaderboard li.zone-down { box-shadow: inset 3px 0 0 var(--neg); }
+.leaderboard li.lb-zone { gap: 0.3rem; padding: 0.5rem 0.5rem 0.2rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-radius: 0; }
+.leaderboard li.lb-zone-up { color: var(--promote); }
+.leaderboard li.lb-zone-down { color: var(--neg); border-top: 1px dashed var(--line); margin-top: 0.4rem; padding-top: 0.6rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
