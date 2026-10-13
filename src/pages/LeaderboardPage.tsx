@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import { Lock, Shield } from "lucide-react";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { ChevronDown, ChevronUp, Lock, Shield } from "lucide-react";
 import { supabase } from "../supabase";
 import Avatar from "../components/Avatar";
 import { TIER_COLOURS, getTierColour, getTierFill } from "../lib/tierColours";
-import type { LadderTier, LeaderboardRow, WeeklyXp } from "../lib/types";
+import type { LadderTier, LeaderboardRow } from "../lib/types";
 
 const leagueNumber = (rank: number) => 11 - rank;
+
+// Matches close_league_week: the top 3 move up and the bottom 3 move down each Monday
+const ZONE_SIZE = 3;
+const TOP_TIER_RANK = 10;
 
 function ordinal(n: number): string {
   const suffix = n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] ?? "th";
@@ -26,7 +30,6 @@ function timeLeft(now = new Date()): string {
 export default function LeaderboardPage() {
   const [ladder, setLadder] = useState<LadderTier[]>([]);
   const [board, setBoard] = useState<LeaderboardRow[] | null>(null);
-  const [xp, setXp] = useState<WeeklyXp | null>(null);
   const currentRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -34,7 +37,6 @@ export default function LeaderboardPage() {
     supabase.rpc("league_leaderboard").then(({ data }) =>
       setBoard(((data as LeaderboardRow[] | null) ?? []).map((r) => ({ ...r, rank: Number(r.rank), weekly_xp: Number(r.weekly_xp) }))),
     );
-    supabase.rpc("my_weekly_xp").then(({ data }) => setXp(((data as WeeklyXp[] | null) ?? [])[0] ?? null));
   }, []);
 
   useEffect(() => {
@@ -113,50 +115,47 @@ export default function LeaderboardPage() {
       </section>
 
       <section className="card">
-        <h2>How you're earning XP</h2>
-        <ul className="list">
-          <li className="row-between">
-            <span>Saving <span className="muted small block">10 XP for every 1% of your monthly income saved</span></span>
-            <strong>{xp?.saving_xp ?? 0} XP</strong>
-          </li>
-          <li className="row-between">
-            <span>Investing <span className="muted small block">20 XP for every 1% invested</span></span>
-            <strong>{xp?.investing_xp ?? 0} XP</strong>
-          </li>
-          <li className="row-between">
-            <span>Paying off debt <span className="muted small block">10 XP for every 1% put towards credit cards and loans</span></span>
-            <strong>{xp?.debt_xp ?? 0} XP</strong>
-          </li>
-          <li className="row-between">
-            <span>
-              Days within your allowance
-              <span className="muted small block">15 XP for each finished day ({xp?.budget_days ?? 0} so far)</span>
-            </span>
-            <strong>{xp?.budget_xp ?? 0} XP</strong>
-          </li>
-        </ul>
-      </section>
-
-      <section className="card">
         <h2>This week</h2>
         {board === null ? (
           <p className="muted">Loading…</p>
         ) : (
           <ol className="leaderboard">
-            {board.map((r) => (
-              <li key={r.user_id} className={r.is_me ? "me" : undefined}>
-                <span className={`lb-rank rank-${r.rank}`}>{r.rank}</span>
-                <Avatar url={r.avatar_url} name={r.full_name} size={36} />
-                <span className="lb-name">
-                  {r.full_name}
-                  {r.is_me && <span className="you"> (you)</span>}
-                </span>
-                <span className="points">{r.weekly_xp} XP</span>
-              </li>
-            ))}
+            {board.map((r) => {
+              const canGoUp = (current?.rank ?? 1) < TOP_TIER_RANK;
+              const canGoDown = (current?.rank ?? 1) > 1;
+              const zone = canGoUp && r.rank <= ZONE_SIZE ? "up" : canGoDown && r.rank > board.length - ZONE_SIZE ? "down" : null;
+              const firstDown = zone === "down" && !board.some((o) => o.rank < r.rank && o.rank > board.length - ZONE_SIZE);
+              return (
+                <Fragment key={r.user_id}>
+                  {zone === "up" && r === board[0] && (
+                    <li className="lb-zone lb-zone-up" aria-hidden><ChevronUp size={14} /> Promotion zone</li>
+                  )}
+                  {firstDown && (
+                    <li className="lb-zone lb-zone-down" aria-hidden><ChevronDown size={14} /> Relegation zone</li>
+                  )}
+                  <li className={[r.is_me ? "me" : "", zone ? `zone-${zone}` : ""].filter(Boolean).join(" ") || undefined}>
+                    <span className={`lb-rank rank-${r.rank}`}>{r.rank}</span>
+                    <Avatar url={r.avatar_url} name={r.full_name} size={36} />
+                    <span className="lb-name">
+                      {r.full_name}
+                      {r.is_me && <span className="you"> (you)</span>}
+                      {zone && <span className="sr-only">{zone === "up" ? ", in the promotion zone" : ", in the relegation zone"}</span>}
+                    </span>
+                    <span className="points">{r.weekly_xp} XP</span>
+                  </li>
+                </Fragment>
+              );
+            })}
           </ol>
         )}
-        <p className="hint">Rankings reset every Monday. The top 3 move up a league and the bottom 3 move down.</p>
+        <p className="hint">
+          Rankings reset every Monday.{" "}
+          {current?.rank === TOP_TIER_RANK
+            ? "This is the top league, so only the bottom 3 move down."
+            : current?.rank === 1
+              ? "The top 3 move up a league. This is the first league, so nobody moves down."
+              : "The top 3 move up a league and the bottom 3 move down."}
+        </p>
       </section>
     </div>
   );
