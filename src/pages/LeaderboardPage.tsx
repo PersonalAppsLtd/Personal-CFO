@@ -44,6 +44,9 @@ export default function LeaderboardPage() {
   }, [ladder]);
 
   const current = ladder.find((t) => t.is_current);
+  // No promotion zone in the top league and no relegation zone in the bottom one
+  const promotionZone = current && current.rank < TOP_TIER_RANK ? ZONE_SIZE : 0;
+  const relegationZone = current && current.rank > 1 ? ZONE_SIZE : 0;
   const me = board?.find((r) => r.is_me);
   const tiers: LadderTier[] = ladder.length
     ? ladder
@@ -120,19 +123,10 @@ export default function LeaderboardPage() {
           <p className="muted">Loading…</p>
         ) : (
           <ol className="leaderboard">
-            {board.map((r) => {
-              const canGoUp = (current?.rank ?? 1) < TOP_TIER_RANK;
-              const canGoDown = (current?.rank ?? 1) > 1;
-              const zone = canGoUp && r.rank <= ZONE_SIZE ? "up" : canGoDown && r.rank > board.length - ZONE_SIZE ? "down" : null;
-              const firstDown = zone === "down" && !board.some((o) => o.rank < r.rank && o.rank > board.length - ZONE_SIZE);
+            {board.map((r, i) => {
+              const zone = i < promotionZone ? "up" : i >= board.length - relegationZone ? "down" : null;
               return (
                 <Fragment key={r.user_id}>
-                  {zone === "up" && r === board[0] && (
-                    <li className="lb-zone lb-zone-up" aria-hidden><ChevronUp size={14} /> Promotion zone</li>
-                  )}
-                  {firstDown && (
-                    <li className="lb-zone lb-zone-down" aria-hidden><ChevronDown size={14} /> Relegation zone</li>
-                  )}
                   <li className={[r.is_me ? "me" : "", zone ? `zone-${zone}` : ""].filter(Boolean).join(" ") || undefined}>
                     <span className={`lb-rank rank-${r.rank}`}>{r.rank}</span>
                     <Avatar url={r.avatar_url} name={r.full_name} size={36} />
@@ -143,6 +137,13 @@ export default function LeaderboardPage() {
                     </span>
                     <span className="points">{r.weekly_xp} XP</span>
                   </li>
+                  {/* Dividers below the promotion zone and above the relegation zone, as in Personal CEO */}
+                  {promotionZone > 0 && i === promotionZone - 1 && board.length > promotionZone && (
+                    <li className="zone-divider promotion" aria-hidden><ChevronUp size={14} /> Promotion zone</li>
+                  )}
+                  {relegationZone > 0 && i === board.length - relegationZone - 1 && (
+                    <li className="zone-divider relegation" aria-hidden><ChevronDown size={14} /> Relegation zone</li>
+                  )}
                 </Fragment>
               );
             })}
