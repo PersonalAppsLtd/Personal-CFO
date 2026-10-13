@@ -332,7 +332,12 @@ h3 { font-size: 1rem; }
 .leaderboard li.zone-up, .leaderboard li.zone-down { border-radius: 0 10px 10px 0; }
 .leaderboard li.zone-up { box-shadow: inset 3px 0 0 var(--promote); }
 .leaderboard li.zone-down { box-shadow: inset 3px 0 0 var(--neg); }
-.leaderboard li.lb-zone { gap: 0.3rem; padding: 0.5rem 0.5rem 0.2rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-radius: 0; }
-.leaderboard li.lb-zone-up { color: var(--promote); }
-.leaderboard li.lb-zone-down { color: var(--neg); border-top: 1px dashed var(--line); margin-top: 0.4rem; padding-top: 0.6rem; }
+.leaderboard li.zone-up .lb-rank:not(.rank-1):not(.rank-2):not(.rank-3) { color: var(--promote); }
+.leaderboard li.zone-down .lb-rank { color: var(--neg); }
+.leaderboard li.zone-divider {
+  gap: 4px; justify-content: center; padding: 6px 0; margin: 4px 0; border-radius: 0;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.zone-divider.promotion { color: var(--promote); border-top: 1px dashed var(--promote); }
+.zone-divider.relegation { color: var(--neg); border-bottom: 1px dashed var(--neg); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
