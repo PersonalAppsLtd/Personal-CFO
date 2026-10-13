@@ -2,12 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Lock, Shield } from "lucide-react";
 import { supabase } from "../supabase";
 import Avatar from "../components/Avatar";
+import { TIER_COLOURS, getTierColour, getTierFill } from "../lib/tierColours";
 import type { LadderTier, LeaderboardRow, WeeklyXp } from "../lib/types";
 
-// Shield colour for each tier, bottom (bronze) to top - same as Personal CEO
-const SHIELD_COLOURS = ["#cd7f32", "#9aa5b1", "#e0a526", "#2f6fd6", "#d63a4a", "#23a26d", "#8e5bd6", "#d98aa5", "#3f3f4e", "#38bdd6"];
-const shieldColour = (rank: number) => SHIELD_COLOURS[(rank - 1) % SHIELD_COLOURS.length];
-// Tier 1 is "League 10", the top tier is "League 1"
 const leagueNumber = (rank: number) => 11 - rank;
 
 function ordinal(n: number): string {
@@ -54,6 +51,17 @@ export default function LeaderboardPage() {
     <div className="stack-lg">
       <h1>Leaderboard</h1>
 
+      <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
+        <defs>
+          {TIER_COLOURS.filter((c) => c.gradient).map((c) => (
+            <linearGradient key={c.id} id={`tier-gradient-${c.id}`} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor={c.gradient![0]} />
+              <stop offset="100%" stopColor={c.gradient![1]} />
+            </linearGradient>
+          ))}
+        </defs>
+      </svg>
+
       <nav className="league-bar" aria-label="Leagues">
         <ol>
           {tiers.map((t) => (
@@ -68,11 +76,11 @@ export default function LeaderboardPage() {
                 <Shield
                   size={t.is_current ? 52 : 40}
                   strokeWidth={1.5}
-                  fill={t.unlocked ? shieldColour(t.rank) : "currentColor"}
-                  color={t.unlocked ? shieldColour(t.rank) : "currentColor"}
+                  fill={t.unlocked ? getTierFill(t.tier_id) : "currentColor"}
+                  color={t.unlocked ? getTierColour(t.tier_id).colour : "currentColor"}
                   aria-hidden
                 />
-                <span className="league-shield-inner">
+                <span className="league-shield-inner" style={t.unlocked ? { color: getTierColour(t.tier_id).ink } : undefined}>
                   {t.unlocked ? leagueNumber(t.rank) : <Lock size={t.is_current ? 18 : 14} aria-hidden />}
                 </span>
               </span>
