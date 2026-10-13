@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
-import { CalendarDays, House, ChartColumn, Handshake, Landmark, Network, Receipt, Settings, Trophy, Wallet } from "lucide-react";
+import { CalendarDays, House, ChartColumn, Handshake, Landmark, Network, ReceiptText, Settings, Trophy, Wallet } from "lucide-react";
 import { supabase } from "./supabase";
 import { AppDataProvider, useApp } from "./lib/data";
 import AuthPage from "./pages/AuthPage";
@@ -38,7 +38,7 @@ export default function App() {
 const NAV = [
   { to: "/", label: "Home", Icon: House },
   { to: "/wallet", label: "Wallet", Icon: Wallet },
-  { to: "/activity", label: "Activity", Icon: Receipt },
+  { to: "/activity", label: "Activity", Icon: ReceiptText },
   { to: "/bills", label: "Bills", Icon: CalendarDays },
   { to: "/cash-flow", label: "Cash flow", Icon: ChartColumn },
   { to: "/points", label: "Points", Icon: Trophy },
