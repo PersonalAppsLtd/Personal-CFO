@@ -325,3 +325,4 @@ h3 { font-size: 1rem; }
 .stat-link { text-decoration: none; color: inherit; }
 .stat-link:hover { border-color: var(--brand); }
 @media (max-width: 720px) { .grid-2-stack { grid-template-columns: 1fr; } }
+.league-badge.unlocked .league-shield svg { filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 0.3)); }
