@@ -55,6 +55,15 @@ npm run build      # type-check + production build
 npm run deploy     # build and deploy to Cloudflare (needs wrangler login)
 ```
 
+## Deploy to Cloudflare
+
+Cloudflare Dashboard → Workers & Pages → `personal-cfo` → Settings → Build. Connect this repo (`PersonalAppsLtd/Personal-CFO`), set the production branch to `main`, and use:
+
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+- Non-production branch deploy command: `npx wrangler versions upload`
+- Under **Build variables**, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (from Supabase → Project Settings → API; they're baked in at build time). If they're missing the build falls back to the values in `src/config.ts`.
+
 ## Limits worth knowing
 
 - **Alerts aren't instant.** Open Banking doesn't push card payments the moment they happen. Banks usually show a payment within minutes to hours, and background refreshes are capped at 4 per account per day. Personal CFO checks every 6 hours and every time you open the app.

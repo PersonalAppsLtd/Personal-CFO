@@ -7,5 +7,7 @@
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"
-  }
+  },
+  // Needed for Cloudflare's preview builds of non-main branches (`wrangler preview`)
+  "previews": {}
 }
