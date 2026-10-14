@@ -341,3 +341,9 @@ h3 { font-size: 1rem; }
 .zone-divider.promotion { color: var(--promote); border-top: 1px dashed var(--promote); }
 .zone-divider.relegation { color: var(--neg); border-bottom: 1px dashed var(--neg); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.chart-box .spent-line { fill: none; stroke: var(--series-2); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chart-box .pace-line { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.chart-box .allowance-line { stroke: var(--muted); stroke-width: 1; opacity: 0.6; }
+.chart-box .spent-dot { fill: var(--series-2); stroke: var(--surface); stroke-width: 2; }
+.chart-box .crosshair { stroke: var(--muted); stroke-width: 1; opacity: 0.5; }
+.swatch.line.dashed { background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 7px); }

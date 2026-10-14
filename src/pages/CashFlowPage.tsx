@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useApp } from "../lib/data";
 import { money } from "../lib/money";
 import type { PeriodScore } from "../lib/types";
+import AllowancePace from "../components/AllowancePace";
 
 const SERIES = [
   { key: "bills", label: "Bills", color: "var(--series-1)" },
@@ -134,6 +135,8 @@ export default function CashFlowPage() {
           </div>
         )}
       </section>
+
+      <AllowancePace />
     </div>
   );
 }
